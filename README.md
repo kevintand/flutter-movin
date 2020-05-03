@@ -1,6 +1,6 @@
 # movin
 
-A new Flutter project.
+A new Flutter movie list experimental project.
 
 ## Getting Started
 
