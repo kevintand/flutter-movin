@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'home.dart';
+import 'search.dart';
+import 'setting.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +38,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int currentTab = 0;
+  HomePage homePage;
+  SearchPage searchPage;
+  SettingPage settingPage;
+  List<Widget> pages;
+  Widget currentPage;
+  
+  @override
+  void initState() {
+    homePage = new HomePage();
+    searchPage = new SearchPage();
+    settingPage = new SettingPage();
+    pages = [homePage, searchPage, settingPage];
+    currentPage = homePage;
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,35 +63,46 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
         backgroundColor: Colors.black,
       ),
-      body: Container(
-        color: Colors.black,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.black,
-        currentIndex: currentTab,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-            backgroundColor: Colors.grey
-          ),
-          
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
+      body: currentPage,
+      bottomNavigationBar: new Theme(
+        data: Theme.of(context).copyWith(
+        // sets the background color of the `BottomNavigationBar`
+        canvasColor: Colors.black,
+        // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+        primaryColor: Colors.white,
+        textTheme: Theme
+            .of(context)
+            .textTheme
+            .copyWith(caption: new TextStyle(color: Colors.grey))),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.black,
+          currentIndex: currentTab,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              title: Text('Home'),
+            ),
+            
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Search'),
+            ),
 
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            title: Text('More'),
-          ),
-        ],
-        fixedColor: Colors.white,
-        onTap: (int index) {
-          setState(() => currentTab = index);
-        },
+            BottomNavigationBarItem(
+              icon: Icon(Icons.menu),
+              title: Text('More'),
+            ),
+          ],
+          fixedColor: Colors.white,
+          onTap: (int index) {
+            setState(() {
+              currentTab = index;
+              currentPage = pages[index];
+            });
+          },
       ),
+    )
     );
   }
 }
